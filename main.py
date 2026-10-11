@@ -22,25 +22,25 @@ class Game:
         if key[pg.K_r] or key[pg.K_F5]:
             self.mapdict = MAPDICT.copy()
             self.block = dict()
-    
+
     def update(self):
 
         self.delta_time = self.clock.tick(self.fps)
-        pg.display.set_caption("snow:click,r=F5")
+        pg.display.set_caption("Snow Simulation | Left Click: Add Snow | R / F5: Reset | Esc: Quit")
         pg.display.flip()
-       
+
 
     def add(self):
         tx,ty = pg.mouse.get_pos()
         x = round((tx)/BLOCKSIZE)
         y = round((ty)/BLOCKSIZE)
         key = pg.mouse.get_pressed(3)
-    
+
         if key[0] and 0<=x<=SIZEX*CHUNKX-1 and 0<=y<=SIZEY*CHUNKY-1:
             self.mapdict.update({(x,y):1})
 
 
-     #very inefficient block of my code    
+     #very inefficient block of my code
     def find_block(self,I,v):
 
         L = []
@@ -52,10 +52,10 @@ class Game:
 
 
     def drop(self):
-    
+
         #maybe I need save after block contanct whit flor but I dont know but look at this if cycle not prety huh
         for I in reversed(self.find_block(self.mapdict,1)):
-   
+
             x,y = I
             p = [-1,0,1]
             if x>SIZEX-2:
@@ -71,7 +71,7 @@ class Game:
                     p.remove(0)
                 if self.mapdict[(x+1,y+1)] == 1:
                     p.remove(+1)
-        
+
             else:
                 if self.mapdict[(x+1,y+1)] == 1:
                     p.remove(+1)
@@ -101,17 +101,17 @@ class Game:
             if y > SIZEY-1:
                 pass
             # what I am doing here?
-            #elif self.mapdict[(x,y)]== 0: 
-            #    pg.draw.rect(self.screen,(20,20,20),(BLOCKSIZE+x*BLOCKSIZE,BLOCKSIZE+y*BLOCKSIZE,BLOCKSIZE,BLOCKSIZE))                
+            #elif self.mapdict[(x,y)]== 0:
+            #    pg.draw.rect(self.screen,(20,20,20),(BLOCKSIZE+x*BLOCKSIZE,BLOCKSIZE+y*BLOCKSIZE,BLOCKSIZE,BLOCKSIZE))
             if self.mapdict[(x,y)]== 1:
-    
+
                 pg.draw.rect(self.screen,(250,y,y),(BLOCKSIZE+x*BLOCKSIZE,BLOCKSIZE+y*BLOCKSIZE,BLOCKSIZE,BLOCKSIZE))
     def check_events(self):
          for event in pg.event.get():
-            if event.type == pg.QUIT:
+            if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                 pg.quit()
                 sys.exit()
-    
+
     def run(self):
         while True:
 
